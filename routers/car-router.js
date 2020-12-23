@@ -24,8 +24,15 @@ router.get("/cars/:id", async (req, res, next) => {
 })
 
 // POST CAR
-router.post("/cars", (req, res, next) => {
+router.post("/cars", async (req, res, next) => {
+    try {
+        const [id] = await db("car-dealer").insert(req.body)
+        const newCar = await db("car-dealer").where({ id }).first()
 
+        res.status(201).json(newCar)
+    } catch (err) {
+        next(err)
+    }
 })
 
 // DELETE CAR
