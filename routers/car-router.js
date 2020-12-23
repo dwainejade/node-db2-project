@@ -36,8 +36,16 @@ router.post("/cars", async (req, res, next) => {
 })
 
 // DELETE CAR
-router.delete("/cars/:id", (req, res, next) => {
-
+router.delete("/cars/:id", async (req, res, next) => {
+    try {
+        const {id} = req.params
+        await db("car-dealer").where("id", id).del()
+        res.json({
+            message: `Car ${id} was deleted`
+        })
+    } catch (err) {
+        next(err)
+    }
 })
 
 module.exports = router
